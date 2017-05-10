@@ -4,6 +4,7 @@ import argparse
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from novaclient import client
+import time
 
 def get_keystone_creds():
     d = {}
@@ -54,11 +55,18 @@ def main():
         # or faster but potentially more error prone:
         #server_host = host_source
         if server_status == 'ACTIVE':
-            print("INFO: Original host: %s" % (server_host)
+            print("INFO: Original host: %s" % (server_host))
             print("INFO: Live-migrating server \'%s\' (UUID: %s)" % (server_name, server_id))
-            print("INFO: Current host: %s" % get_hostname_of_host(server) )
-            print("INFO: Current status: %s" % server.status)
-            print("INFO: Progress: %s" % server.progress)
+            #server.live_migrate(host=host_target, block_migration=False, disk_over_commit=False)
+            nova.servers.live_migrate(host=host_target, block_migration=False, server=server_id, disk_over_commit=False)
+            time.sleep(5)
+            current_status = server.status
+            while current_status != 'ACTIVE':
+                print("INFO: Current status: %s" % current_status)
+                print("INFO: Current host: %s" % get_hostname_of_host(server) )
+                print("INFO: Progress: %s" % server.progress)
+                time.sleep(5)
+                current_status = server.status
         else:
             print("WARNING: Skipping server \'%s\' (UUID: %s) because it's in the state: %s" % (server_name, server_id, server_status) )
 

@@ -1,1 +1,3 @@
 https://stackoverflow.com/questions/22803987/how-to-use-an-attribute-that-has-colon-in-ite-name
+http://pythoncentral.io/pythons-time-sleep-pause-wait-sleep-stop-your-code/
+https://ask.openstack.org/en/question/103479/openstack-nova-api-live-migrate-attributeerror-_action-python-27/
