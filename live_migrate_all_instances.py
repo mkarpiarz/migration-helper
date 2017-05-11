@@ -60,12 +60,15 @@ def main():
             #server.live_migrate(host=host_target, block_migration=False, disk_over_commit=False)
             nova.servers.live_migrate(host=host_target, block_migration=False, server=server_id, disk_over_commit=False)
             time.sleep(5)
+            # in order to get the most recent status, we need to get the server again
+            server = nova.servers.get(server_id)
             current_status = server.status
             while current_status != 'ACTIVE':
                 print("INFO: Current status: %s" % current_status)
                 print("INFO: Current host: %s" % get_hostname_of_host(server) )
                 print("INFO: Progress: %s" % server.progress)
                 time.sleep(5)
+                server = nova.servers.get(server_id)
                 current_status = server.status
         else:
             print("WARNING: Skipping server \'%s\' (UUID: %s) because it's in the state: %s" % (server_name, server_id, server_status) )
