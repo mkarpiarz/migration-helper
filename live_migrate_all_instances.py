@@ -21,14 +21,13 @@ def main():
 
     creds = credentials.Credentials()
     print creds.project_name
-    exit(1)
 
-    auth = v3.Password(auth_url='https://compute.datacentred.io:5000/v3/',
-                       username=os.environ['OS_USERNAME'],
-                       password=os.environ['OS_PASSWORD'],
-                       project_name=os.environ['OS_PROJECT_NAME'],
-                       user_domain_id='default',
-                       project_domain_id='default')
+    auth = v3.Password(auth_url=creds.auth_url,
+                       username=creds.username,
+                       password=creds.password,
+                       project_name=creds.project_name,
+                       user_domain_id=creds.user_domain_id,
+                       project_domain_id=creds.project_domain_id)
     sess = session.Session(auth=auth)
     nova = client.Client("2.1", session=sess)
     #print(nova.hypervisors.list())
